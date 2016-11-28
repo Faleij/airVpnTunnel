@@ -1,0 +1,20 @@
+{
+  "name": "airVpnTunnel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "airVpnTunnel": "./bin/config.js"
+  },
+  "author": "Faleij",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "0.22.0",
+    "inquirer": "1.2.3",
+    "network": "0.2.1",
+    "proxy": "git+https://github.com/nikolakanacki/proxy.git"
+  }
+}
