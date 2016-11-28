@@ -22,26 +22,26 @@ const destinations = [
 // restore routes
 destinations.forEach(destination => execSync(getCmd(destination)));
 
-network.get_active_interface(function(err, {ip_address}) {
-    if (err) {
-        throw err;
-    }
+if (config.proxy) {
+    network.get_active_interface(function(err, {ip_address}) {
+        if (err) throw err;
 
-    const proxyLog = fs.openSync(path.resolve(__dirname, '../tmp/proxy.log'), 'a');
+        const proxyLog = fs.openSync(path.resolve(__dirname, '../tmp/proxy.log'), 'a');
 
-    // spawn detached proxy with forwarded arguments
-    const proxyPath = path.resolve(__dirname, '../node_modules/proxy/bin/proxy');
-    const proxy = spawn(process.argv[0], [proxyPath, `-l`, `${ip_address}`].concat(process.argv.slice(1)), {
-      detached: true,
-      //stdio: 'ignore'
-      // TODO: pipe stdio to a log file
-      stdio: ['ignore', proxyLog, proxyLog],
-    });
+        // spawn detached proxy with forwarded arguments
+        const proxyPath = path.resolve(__dirname, '../node_modules/proxy/bin/proxy');
+        const proxy = spawn(process.argv[0], [proxyPath, `-l`, `${ip_address}`].concat(process.argv.slice(1)).concat(`-p`, `${config.proxyPort}`), {
+          detached: true,
+          //stdio: 'ignore'
+          // TODO: pipe stdio to a log file
+          stdio: ['ignore', proxyLog, proxyLog],
+        });
 
-    // TODO: log file output
-    console.log(`Spawned child pid: ${proxy.pid}`);
+        // TODO: log file output
+        console.log(`Spawned child pid: ${proxy.pid}`);
 
-    fs.writeFileSync(path.resolve(__dirname, '../tmp/proxy.pid'), proxy.pid);
+        fs.writeFileSync(path.resolve(__dirname, '../tmp/proxy.pid'), proxy.pid);
 
-    process.exit();
+        process.exit();
 });
+}

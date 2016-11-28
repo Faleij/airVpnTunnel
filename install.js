@@ -9,7 +9,7 @@ const data = fs.readFileSync(filePath);
 let airVPN = cheerio.load(data, { xmlMode: true, decodeEntities: false });
 
 // save backup of original
-const bacPath = `${filePath}.bac.${new Date().toISOString().replace(/:\+/g, '-')}`;
+const bacPath = `${filePath}.bac.${new Date().toISOString().replace(/[:\+]+/g, '-')}`;
 fs.writeFileSync(bacPath, airVPN.xml());
 console.log('saved a copy of your airVPN config to', bacPath);
 
